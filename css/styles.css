@@ -1,0 +1,48 @@
+.wrapper{
+	padding: 15px;
+	max-width: 900px;
+}
+.opacity{
+  opacity:0.5;
+}
+.error{
+  z-index: 99;
+  text-align: center;
+  height: 100px;
+  font-size: 24px;
+  position: absolute;
+  top:30px;
+  left:200px;
+  right:200px;
+  width:500px;
+  background-color: burlywood;
+  color: black;
+}
+
+.close{
+  cursor: pointer;
+}
+
+.radio{
+  height: 24px;
+  width: 24px;
+}
+.values{
+  font-size: 24px;
+}
+.send{
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+.get{
+  margin: 10px 0;
+}
+.center{
+  text-align: center;
+}
+
+.active, .passive{
+  font-size: 24px;
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+}

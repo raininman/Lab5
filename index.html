@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>1</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link href="css/styles.css" rel="stylesheet">
+	<script src="js/vue.js"></script>
+</head>
+<body class="sample">
+	<div class="wrapper" >
+    <div class="error" v-if="error2">
+      Введите значение в виде числа<span @click="error2 = !error2" class="close">&times;</span>
+    </div>
+    <div class="error" v-if="error">
+      Выберите Актив или Пассив <span @click="error = !error" class="close">&times;</span>
+    </div>
+		<div :class="{'opacity':error || error2}">
+			<form @submit="checkForm">
+        <div class="form-group">
+					<label class="active">
+            <span>Актив</span>
+					  <input type="radio" class="radio" name="radio" v-model="active">
+          </label><br>
+          <label class="passive">Пассив
+					  <input type="radio" class="radio" name="radio" v-model="passive">
+          </label>
+        </div>
+				<div class="values">
+					<label>Название</label>
+					<input type="text" class="form-control" v-model="Title" required>
+          <label>Значение</label>
+					<input type="text" class="form-control" v-model="Value" required>
+        </div>
+				<button class="btn btn-success send" @click.prevent="pushElements">Отправить значения</button>
+			</form>
+      <hr>
+			<div>
+				<table class="table table-bordered center">
+					<tr>
+						<td>Название активов</td>
+						<td>Название пассивов</td>
+            <td>Значение активов</td>
+            <td>Значение пассивов</td>
+					</tr>
+					<tr v-for="i in quantity" :key="i">
+						<td>{{activeTitle[i-1]}}</td>
+						<td>{{passiveTitle[i-1]}}</td>
+            <td>{{activeValue[i-1]}}</td>
+            <td>{{passiveValue[i-1]}}</td>
+					</tr>
+				</table>
+        <button class="btn btn-success get" @click="getAct">Сумма активов</button> <span>{{getActives}}</span><br>
+        <button class="btn btn-success get" @click="getPas">Сумма пассивов</button> <span>{{getPassives}}</span><br>
+        <button class="btn btn-success get" @click="getItog">Итоговый баланс</button> <span>{{itog}}</span>
+			</div>
+		</div>
+	</div>
+	<script>
+		Vue.createApp({
+			data: () => ({
+        Title:'',
+        Value:'',
+        activeTitle:[],
+        activeValue:[],
+        passiveTitle:[],
+        passiveValue:[],
+        active:false,
+        passive:false,
+        quantity:0,
+        getActives:0,
+        getPassives:0,
+        itog:0,
+        error:false,
+        error2:false
+			}),
+      methods:{
+        pushElements(){
+          parseFloat(this.Value)
+          if(isNaN(this.Value)){
+            this.error2 = true
+          }else{
+          if(this.active && !isNaN(this.Value)){
+            this.activeValue.push(this.Value)
+            this.activeTitle.push(this.Title)
+            this.active=false
+          }else if(this.passive && !isNaN(this.Value)){
+            this.passiveValue.push(this.Value)
+            this.passiveTitle.push(this.Title)
+            this.passive=false
+          }else{
+            this.error = true
+          }
+          if(this.activeValue.length >= this.passiveValue.length){
+            this.quantity = this.activeValue.length
+          }else{
+            this.quantity = this.passiveValue.length
+          }
+        }
+        },
+        getAct(){
+          this.getActives = 0
+          this.activeValue.forEach(el=>{
+            this.getActives += parseFloat(el)
+          })
+        },
+        getPas(){
+          this.getPassives = 0
+          this.passiveValue.forEach(el=>{
+            this.getPassives += parseFloat(el)
+          })
+        },
+        getItog(){
+          this.itog = this.getActives - this.getPassives
+        }
+      },
+      computed:{},
+      watch:{}
+		}).mount('.sample');
+	</script>
+</body>
+</html>
